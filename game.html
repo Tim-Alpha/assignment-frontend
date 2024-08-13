@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Twitter meta tags -->
+    <!-- <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Check out my game score!">
+    <meta name="twitter:description" content="I scored high on DOME! See my score and try to beat it.">
+    <meta name="twitter:image" content="https://socialverse-assets.s3.amazonaws.com/GameMap.jpg"> -->
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Changa+One&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">       
+  <title>DOME</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poetsen+One&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="index.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <div class="game-main-cont game-bg">
+    <div id="gameContainer" class="game-container">
+      <canvas></canvas>
+      <div id="statusMessage" style="display: none;">Saving your score, please wait...</div>
+      <div id="instructionModal" class="modal">
+        <div class="modal-content">
+            <h2>🎮 Game Instructions</h2>
+            <p>Welcome to Defense of Meme! Protect TateKingdom from waves of enemy Ansem using different types of Tate towers. Each tower and enemy has unique properties. Read below to learn more.</p>
+
+          <!-- Instructional Video Embed -->
+          <div class="video-container mb-6">
+            <iframe class="w-full h-64 md:h-80" src="https://www.youtube.com/embed/e034RuPfHOo?autoplay=1&amp;playback_rate=2" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+            
+            <h3>🏰 Tate Towers</h3>
+            <ul class="ins-list">
+                <li>Basic Tate: Deals 5 damage per shot, costs 25 coins, and has 400 bullets.</li>
+                <li>Advanced Tate: Deals 20 damage per shot, costs 400 coins, and has 200 bullets.</li>
+                <li>Super Tate: Deals 110 damage per shot, costs 2500 coins, and has 180 bullets.</li>
+            </ul>
+            <h3>👾 Ansem Enemies</h3>
+            <ul class="ins-list">
+                <li>Basic Ansem: 160 HP, speed of 4, and rewards 25 coins.</li>
+                <li>Fast Ansem: 130 HP, speed of 8, and rewards 150 coins.</li>
+                <li>Tank Ansem: 3000 HP, speed of 2.2, and rewards 500 coins.</li>
+            </ul><br />
+            <p>You have 9 hearts and 150 coins at the start. Good luck!</p>
+            <button id="startBtn">Start Game</button>
+        </div>
+    </div>
+
+      <div class="game-over">GAME OVER</div>
+      <div class="score-container"></div>
+      <div class="score-display">
+        <div id="towerSelection">
+          <div class="tower-option">
+            <img id="basicTower" src="./img/tower/basic-tate-btn.png" alt="Basic Tower">
+            <span class="tower-cost" id="basicTowerCost"></span>
+          </div>
+          <div class="tower-option">
+            <img id="advancedTower" src="./img/tower/advance-tate-btn.png" alt="Advanced Tower">
+            <span class="tower-cost" id="advancedTowerCost"></span>
+          </div>
+          <div class="tower-option">
+            <img id="superTower" src="./img/tower/super_tate-btn.png" alt="Super Tower">
+            <span class="tower-cost" id="superTowerCost"></span>
+          </div>
+        </div>
+        <div class="coins-container">
+          <div id="hash"></div>
+          <img src="./img/coin-animation.gif" alt="coins" class="w-10">
+          <div id="coins">150</div>
+        </div>
+        <div class="hearts-container">
+          <img src="./img/heart-animation.gif" alt="coins" class="w-12">
+          <div id="hearts">9</div> <!-- Cat have 9 life -->
+        </div>
+      </div>
+
+      <div id="dialogDiv">
+        <img class="dialog-img" src="./img/ansem-dance-1.gif" alt="gif">
+        <div class="score-div">
+          <div class="dialog-heading-cont">
+            <p class="dialog-heading font-poet">$DOME</p>
+            <p class="score "><img src="./img/coin.gif" alt="coins"> <span id="score"></span></p>
+          </div>
+          <ul class="inst-list">
+            <li>Tweet your $DOME highscore and tag @defenceofmeme on Twitter with your contract address for an airdrop
+              of
+              that amount.</li>
+            <li>Only valid 1 per account.</li>
+            <li>Only valid for accounts with >420 followers.</li>
+            <li>Only valid for accounts that were created before June 2024.</li>
+            <li>Airdrops will be made until all 50,000,000 tokens are claimed.</li>
+          </ul>
+          <div class="dialog-btn-cont">
+            <button onclick="handleRestart()">
+              <img src="./img/restart.svg" alt="restart">
+            </button>
+            <a href="/">
+              <img src="./img/home.svg" alt="restart">
+            </a>
+            <a href="#" id="shareBtn" target="_blank">
+              <img src="./img/share.svg" alt="restart">
+            </a>
+          </div>
+        </div>
+        <img class="dialog-img" src="./img/ansem-dance-2.gif" alt="gif">
+        <button id="destroyButton" style="display: none;">Destroy</button>
+      </div>
+    </div>
+    <div class="table-cont">
+      <table>
+        <thead>
+          <tr>
+            <th>
+              S.No</th>
+            <th>
+              GAME ID</th>
+              <th>
+                Score</th>
+                <th>
+                  Wave</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboard">
+          <!-- Data will be dynamically inserted here -->
+        </tbody>
+      </table>
+    </div>
+    <!-- The Modal -->
+    <div id="mobileWarning" class="font-poet">
+      <p>This experience is optimized for desktop. Please play on desktop.</p>
+      <!-- <div class="flex gap-4 mt-5 text-white text-2xl ">
+      <button class="bg-blue-500 px-4 py-1 rounded" onclick="continueToGame()">Continue</button>
+      <button class="bg-red-500 px-4 py-1 rounded" onclick="closeModal()">Close</button>
+    </div> -->
+    </div>
+  </div>
+
+  <script src="./js/placementTilesData.js"></script>
+  <script src="./js/waypoints.js"></script>
+  <script src="./js/classes/Sprite.js"></script>
+  <script src="./js/utils/towerTypes.js"></script>
+  <script src="./js/utils/enemyTypes.js"></script>
+  <script src="./js/classes/Building.js"></script>
+  <script src="./js/classes/Enemy.js"></script>
+  <script src="./js/classes/PlacementTile.js"></script>
+  <script src="./js/classes/Projectile.js"></script>
+  <script src="./js/index.js"></script>
+</body>
+
+</html>
